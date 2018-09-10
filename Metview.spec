@@ -1,0 +1,150 @@
+%if 0%{?rhel} == 7
+%define python3_vers python34
+%define cmake_vers cmake3
+%define ctest_vers ctest3
+%define netcdf_vers netcdf-cxx-devel
+%else
+%define python3_vers python3
+%define cmake_vers cmake
+%define ctest_vers ctest
+%define netcdf_vers netcdf-cxx4-devel
+%endif
+
+Name: Metview
+Version: 5.1.1
+Release: 1%{dist}
+Summary: Metview is an interactive meteorological application
+URL: https://software.ecmwf.int/wiki/display/METV/Metview
+Packager: Daniele Branchini <dbranchini@arpae.it>
+Group: Applications/Meteo
+License: Apache License, Version 2.0
+Source0: %{name}-%{version}-Source.tar.gz
+Distribution: ARPAE-SIMC Fedora %{dist} Linux
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+BuildRequires:  gcc-c++
+BuildRequires:  gcc-gfortran
+BuildRequires:  %{cmake_vers}
+BuildRequires:  %{netcdf_vers}
+BuildRequires:  proj-devel
+BuildRequires:  eccodes-devel
+BuildRequires:  Magics-devel
+BuildRequires:  git
+BuildRequires:  flex
+BuildRequires:  bison
+BuildRequires:  byacc
+BuildRequires:  gdbm-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qtxmlpatterns-devel
+BuildRequires:  cairo-devel
+BuildRequires:  pango-devel
+BuildRequires:  libgeotiff-devel
+
+# SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
+# https://fedoraproject.org/wiki/Changes/SunRPCRemoval
+%{?fedora:BuildRequires: rpcgen libtirpc-devel}
+
+# Previous Metview versions required this stuff:
+#BuildRequires: eccodes-devel openjpeg-devel gdbm-devel qt-devel Magics-devel ksh qt-devel qtwebkit-devel flex bison libXmu-devel openmotif-devel byacc
+#Requires: Magics ksh xorg-x11-utils
+
+%description
+Metview is a meteorological workstation application designed to be
+a complete working environment for both the operational and research
+meteorologist.
+Its capabilities include powerful data access, processing and visualisation.
+It features a powerful icon-based user interface for interactive work, and
+a scripting language for batch processing. The two are linked through the
+ability to automatically convert icons into their equivalent script code.
+
+Metview can take input data from a variety of sources, including:
+ - GRIB files (editions 1 and 2)
+ - BUFR files
+ - MARS (ECMWFs meteorological archive)
+ - ODB (Observation Database)
+ - Local databases
+ - ASCII data files (CSV, grids and scattered data)
+ - NetCDF
+
+ Powerful data filtering and processing facilities are then available, and
+if graphics output is desired, then Metview can produce many plot types,
+including:
+ - map views in various projections
+ - cross sections
+ - vertical profiles
+ - x/y graph plots
+ - intelligent overlay of data from various sources on the same map
+ - arrangement of multiple plots on the same page
+
+Metview was developed as part of a cooperation between ECMWF and INPE/CPTEC
+(Brazilian National Institute for Space Research / Centre for Weather
+Forecasts and Climate Studies).
+
+%prep
+%setup -q -n %{name}-%{version}-Source
+
+%build
+
+mkdir build
+pushd build
+
+# da https://software.ecmwf.int/wiki/display/METV/Installation+Guide
+
+%{cmake_vers} .. \
+    -DCMAKE_PREFIX_PATH=%{_prefix} \
+    -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-error=format-security -I/usr/include/tirpc -ltirpc" \
+    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused -I/usr/include/tirpc -ltirpc" \
+    -DGRIB_API_PATH=%{_libdir} \
+    -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
+    -DBUILD_SHARED_LIBS=ON \
+    -DENABLE_UI=ON \
+    -DENABLE_PLOTTING=ON \
+    -DENABLE_OPERA_RADAR=ON
+
+# This does not work anymore (see todo below)
+#    -DMETVIEW_INSTALL_LIB_DIR=lib64 \
+
+%{make_build}
+popd
+
+%check
+
+pushd build
+%{ctest_vers}
+popd
+
+%install
+# install all files into the BuildRoot
+[ "%{buildroot}" != / ] && rm -rf %{buildroot}
+pushd build
+%make_install
+popd
+
+ln -s metview $RPM_BUILD_ROOT/usr/bin/metview4
+
+# hideous (TODO: fix)
+mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
+
+%clean
+# clean up the hard disk after build
+[ "%{buildroot}" != / ] && rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+
+%dir %{_bindir}/metview_bin
+%{_bindir}/metview_bin/*
+%{_bindir}/metview
+%{_bindir}/metview4
+%{_includedir}/macro_api.h
+%{_datadir}/metview
+%{_datadir}/applications/metview.desktop
+%{_libdir}/libMvMars.a
+%{_libdir}/libmacro_api_f90.a
+
+
+%changelog
+* Mon Sep 10 2018 Daniele Branchini <dbranchini@arpae.it> - 5.1.1-1
+- Version 5.1.1
