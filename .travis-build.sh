@@ -36,7 +36,6 @@ then
     pkgname="$(rpmspec -q --qf="Metview-%{version}-%{release}\n" Metview.spec | head -n1)"
     mkdir -p ~/rpmbuild/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
     cp Metview.spec ~/rpmbuild/SPECS/
-    cp *.patch ~/rpmbuild/SOURCES/
     spectool -g -R -S ~/rpmbuild/SPECS/Metview.spec
     set +x
     rpmbuild -ba ~/rpmbuild/SPECS/Metview.spec 2>&1 | pv -q -L 3k
