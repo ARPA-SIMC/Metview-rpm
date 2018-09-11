@@ -10,17 +10,13 @@
 %define netcdf_vers netcdf-cxx4-devel
 %endif
 
-Name: Metview
-Version: 5.1.1
-Release: 1%{dist}
-Summary: Metview is an interactive meteorological application
-URL: https://software.ecmwf.int/wiki/display/METV/Metview
-Packager: Daniele Branchini <dbranchini@arpae.it>
-Group: Applications/Meteo
-License: Apache License, Version 2.0
-Source0: %{name}-%{version}-Source.tar.gz
-Distribution: ARPAE-SIMC Fedora %{dist} Linux
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+Name:           Metview
+Version:        5.1.1
+Release:        1%{dist}
+Summary:        Metview is an interactive meteorological application
+URL:            https://confluence.ecmwf.int/display/METV/Metview
+License:        Apache License, Version 2.0
+Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -44,10 +40,6 @@ BuildRequires:  libgeotiff-devel
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
 %{?fedora:BuildRequires: rpcgen libtirpc-devel}
-
-# Previous Metview versions required this stuff:
-#BuildRequires: eccodes-devel openjpeg-devel gdbm-devel qt-devel Magics-devel ksh qt-devel qtwebkit-devel flex bison libXmu-devel openmotif-devel byacc
-#Requires: Magics ksh xorg-x11-utils
 
 %description
 Metview is a meteorological workstation application designed to be
@@ -89,7 +81,7 @@ Forecasts and Climate Studies).
 mkdir build
 pushd build
 
-# da https://software.ecmwf.int/wiki/display/METV/Installation+Guide
+# https://confluence.ecmwf.int/display/METV/Installation+Guide
 
 %{cmake_vers} .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
@@ -139,11 +131,15 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_bindir}/metview
 %{_bindir}/metview4
 %{_includedir}/macro_api.h
+%{_includedir}/metview_ecbuild_config.h
 %{_datadir}/metview
 %{_datadir}/applications/metview.desktop
-%{_libdir}/libMvMars.a
+%{_libdir}/libmacro_api_c.a
 %{_libdir}/libmacro_api_f90.a
-
+%{_libdir}/libMetview.so
+%{_libdir}/libMvFTimeUtil.so
+%{_libdir}/libMvMacro.so
+%{_libdir}/libMvMars.so
 
 %changelog
 * Mon Sep 10 2018 Daniele Branchini <dbranchini@arpae.it> - 5.1.1-1
