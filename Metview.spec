@@ -104,7 +104,6 @@ pushd build
     -DINSTALL_LIB_DIR=%{_lib} \
     -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
-    -DECCODES_DEFINITIONS=%{_datarootdir} \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
@@ -117,7 +116,7 @@ popd
 %check
 
 pushd build
-CTEST_OUTPUT_ON_FAILURE=1 %{ctest_vers}
+CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions %{ctest_vers}
 popd
 
 %install
