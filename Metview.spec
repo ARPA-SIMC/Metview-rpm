@@ -40,10 +40,11 @@ BuildRequires:  libgeotiff-devel
 BuildRequires:  jasper-devel
 BuildRequires:  fftw-devel
 
-# The following are required for ctest
+# The following is required for ctest
 BuildRequires:  eccodes
-BuildRequires:  eccodes-data
-
+# On centos7 and f<28 we still have our spec
+# that differs from the official one of f28
+%{?fc28:BuildRequires: eccodes-data}
 
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
@@ -116,7 +117,7 @@ popd
 %check
 
 pushd build
-%{ctest_vers} -VV
+CTEST_OUTPUT_ON_FAILURE=1 LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
 popd
 
 %install
