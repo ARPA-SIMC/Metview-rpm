@@ -37,6 +37,7 @@ BuildRequires:  qt5-qtxmlpatterns-devel
 BuildRequires:  cairo-devel
 BuildRequires:  pango-devel
 BuildRequires:  libgeotiff-devel
+BuildRequires:  jasper-devel
 
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
