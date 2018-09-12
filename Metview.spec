@@ -1,13 +1,9 @@
 %if 0%{?rhel} == 7
-%define python3_vers python34
 %define cmake_vers cmake3
 %define ctest_vers ctest3
-%define netcdf_vers netcdf-cxx-devel
 %else
-%define python3_vers python3
 %define cmake_vers cmake
 %define ctest_vers ctest
-%define netcdf_vers netcdf-cxx4-devel
 %endif
 
 Name:           Metview
@@ -20,9 +16,11 @@ Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
-BuildRequires:  %{cmake_vers}
+BuildRequires:  cmake
+%{?rhel:BuildRequires: cmake3}
 BuildRequires:  netcdf-devel
-BuildRequires:  %{netcdf_vers}
+BuildRequires:  netcdf-cxx-devel
+%{?fedora:BuildRequires: netcdf-cxx4-devel}
 BuildRequires:  proj-devel
 BuildRequires:  eccodes-devel
 BuildRequires:  libemos
@@ -89,7 +87,9 @@ pushd build
 %{cmake_vers} .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
-    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-error=format-security %{?fedora:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_INSTALL_MESSAGE=NEVER \
+    -DINSTALL_LIB_DIR=%{_lib} \
+    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?fedora:-I/usr/include/tirpc -ltirpc}" \
     -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?fedora:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_PATH=%{_libdir} \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
@@ -97,9 +97,6 @@ pushd build
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
     -DENABLE_OPERA_RADAR=ON
-
-# This does not work anymore (see todo below)
-#    -DMETVIEW_INSTALL_LIB_DIR=lib64 \
 
 %{make_build}
 popd
@@ -118,9 +115,6 @@ pushd build
 popd
 
 ln -s metview $RPM_BUILD_ROOT/usr/bin/metview4
-
-# hideous (TODO: fix)
-mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 
 %clean
 # clean up the hard disk after build
