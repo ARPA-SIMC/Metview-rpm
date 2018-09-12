@@ -116,7 +116,7 @@ popd
 %check
 
 pushd build
-CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions %{ctest_vers}
+CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
 popd
 
 %install
