@@ -117,7 +117,7 @@ popd
 %check
 
 pushd build
-CTEST_OUTPUT_ON_FAILURE=1 LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
+CTEST_OUTPUT_ON_FAILURE=1 %{ctest_vers}
 popd
 
 %install
