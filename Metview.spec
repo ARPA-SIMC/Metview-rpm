@@ -40,6 +40,11 @@ BuildRequires:  libgeotiff-devel
 BuildRequires:  jasper-devel
 BuildRequires:  fftw-devel
 
+# The following are required for ctest
+BuildRequires:  eccodes
+BuildRequires:  eccodes-data
+
+
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
 
