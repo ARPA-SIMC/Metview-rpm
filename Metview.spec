@@ -21,10 +21,13 @@ Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  %{cmake_vers}
+BuildRequires:  netcdf-devel
 BuildRequires:  %{netcdf_vers}
 BuildRequires:  proj-devel
 BuildRequires:  eccodes-devel
+BuildRequires:  libemos
 BuildRequires:  Magics-devel
+BuildRequires:  boost-devel
 BuildRequires:  git
 BuildRequires:  flex
 BuildRequires:  bison
@@ -86,8 +89,8 @@ pushd build
 %{cmake_vers} .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
-    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-error=format-security -I/usr/include/tirpc -ltirpc" \
-    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused -I/usr/include/tirpc -ltirpc" \
+    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-error=format-security %{?fedora:---I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?fedora:---I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_PATH=%{_libdir} \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
