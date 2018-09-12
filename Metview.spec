@@ -106,7 +106,7 @@ popd
 %check
 
 pushd build
-%{ctest_vers}
+%{ctest_vers} -VV
 popd
 
 %install
