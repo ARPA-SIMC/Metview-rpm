@@ -29,7 +29,7 @@ then
     dnf copr enable -q -y simc/stable
 fi
 
-$builddep -y Metview.spec
+$builddep -q -y Metview.spec
 
 if [[ $image =~ ^fedora: || $image =~ ^centos: ]]
 then

@@ -42,7 +42,12 @@ BuildRequires:  fftw-devel
 
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
-%{?fedora:BuildRequires: rpcgen libtirpc-devel}
+
+%if 0%{?fedora} >= 28
+%define norpc 1
+%endif
+
+%{?norpc:BuildRequires: rpcgen libtirpc-devel}
 
 %description
 Metview is a meteorological workstation application designed to be
@@ -91,8 +96,8 @@ pushd build
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
     -DINSTALL_LIB_DIR=%{_lib} \
-    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?fedora:-I/usr/include/tirpc -ltirpc}" \
-    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?fedora:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_PATH=%{_libdir} \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
