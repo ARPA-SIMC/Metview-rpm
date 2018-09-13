@@ -101,7 +101,6 @@ pushd build
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
-    -DINSTALL_LIB_DIR=%{_lib} \
     -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
@@ -109,6 +108,10 @@ pushd build
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
     -DENABLE_OPERA_RADAR=ON
+
+# This seems to break inline compilation in ctest
+#  -DINSTALL_LIB_DIR=%{_lib} \
+
 
 %{make_build}
 popd
@@ -127,6 +130,9 @@ pushd build
 popd
 
 ln -s metview $RPM_BUILD_ROOT/usr/bin/metview4
+
+# this is hideous but setting -DINSTALL_LIB_DIR seems to break inline compilation (at least in ctest)
+mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 
 %clean
 # clean up the hard disk after build
