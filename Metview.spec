@@ -7,7 +7,7 @@
 %endif
 
 Name:           Metview
-Version:        5.1.1
+Version:        5.2.1
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -157,5 +157,8 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_libdir}/libMvMars.so
 
 %changelog
+* Tue Oct 23 2018 Daniele Branchini <dbranchini@arpae.it> - 5.2.1-1
+- Version 5.2.1
+
 * Mon Sep 10 2018 Daniele Branchini <dbranchini@arpae.it> - 5.1.1-1
 - Version 5.1.1
