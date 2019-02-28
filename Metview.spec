@@ -54,6 +54,13 @@ BuildRequires:  eccodes
 %endif
 
 %{?norpc:BuildRequires: rpcgen libtirpc-devel}
+# required in scripts
+Requires: hostname /usr/bin/xdpyinfo
+# launched by UI
+Requires: xterm vi
+# not installed as dependency on barebone systems, without it keyboard
+# does not work
+Requires: xkeyboard-config
 
 %description
 Metview is a meteorological workstation application designed to be
