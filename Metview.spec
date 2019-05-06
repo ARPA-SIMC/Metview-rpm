@@ -7,7 +7,7 @@
 %endif
 
 Name:           Metview
-Version:        5.2.1
+Version:        5.5.0
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -22,7 +22,7 @@ BuildRequires:  netcdf-devel
 BuildRequires:  netcdf-cxx-devel
 %{?fedora:BuildRequires: netcdf-cxx4-devel}
 BuildRequires:  proj-devel
-BuildRequires:  eccodes-devel
+BuildRequires:  eccodes-devel >= 2.12.0
 BuildRequires:  libemos
 BuildRequires:  Magics-devel
 BuildRequires:  boost-devel
@@ -42,9 +42,7 @@ BuildRequires:  fftw-devel
 
 # The following is required for ctest
 BuildRequires:  eccodes
-# On centos7 and f<28 we still have our spec
-# that differs from the official one of f28
-%{?fc28:BuildRequires: eccodes-data}
+BuildRequires:  eccodes-data
 
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
@@ -164,6 +162,9 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_libdir}/libMvMars.so
 
 %changelog
+* Mon Apr 15 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.0-1
+- Version 5.5.0
+
 * Tue Oct 23 2018 Daniele Branchini <dbranchini@arpae.it> - 5.2.1-1
 - Version 5.2.1
 
