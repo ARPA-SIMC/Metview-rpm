@@ -8,7 +8,7 @@
 
 Name:           Metview
 Version:        5.5.0
-Release:        1%{dist}
+Release:        2%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
@@ -43,6 +43,12 @@ BuildRequires:  fftw-devel
 # The following is required for ctest
 BuildRequires:  eccodes
 BuildRequires:  eccodes-data
+
+%if 0%{?rhel} == 7
+# newer gcc needed
+BuildRequires: devtoolset-7
+%endif
+
 
 # SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
 # https://fedoraproject.org/wiki/Changes/SunRPCRemoval
@@ -106,6 +112,12 @@ pushd build
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
+%if 0%{?rhel} == 7
+    -DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc \
+    -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ \
+    -DCMAKE_Fortran_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gfortran \
+    -DCMAKE_BUILD_TYPE=Release \
+%endif
     -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
@@ -116,7 +128,6 @@ pushd build
 
 # This seems to break inline compilation in ctest
 #  -DINSTALL_LIB_DIR=%{_lib} \
-
 
 %{make_build}
 popd
@@ -162,6 +173,9 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_libdir}/libMvMars.so
 
 %changelog
+* Mon May  6 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.0-2
+- Added CentOs7 dependency for newer gcc
+
 * Mon Apr 15 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.0-1
 - Version 5.5.0
 
