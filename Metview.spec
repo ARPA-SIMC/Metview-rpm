@@ -7,8 +7,8 @@
 %endif
 
 Name:           Metview
-Version:        5.5.0
-Release:        2%{dist}
+Version:        5.5.3
+Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
@@ -115,6 +115,7 @@ pushd build
 %if 0%{?rhel} == 7
     -DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc \
     -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ \
+    -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran \
     -DCMAKE_BUILD_TYPE=Release \
 %endif
     -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
@@ -172,6 +173,10 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_libdir}/libMvMars.so
 
 %changelog
+* Thu May 16 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.3-1
+- Version 5.5.3
+- Forced old gfortran compiler to match eccodes/Magics packages
+
 * Mon May  6 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.0-2
 - Added CentOs7 dependency for newer gcc
 
