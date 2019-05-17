@@ -112,43 +112,73 @@ pushd build
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
+    -DINSTALL_LIB_DIR=%{_lib} \
 %if 0%{?rhel} == 7
     -DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc \
     -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ \
     -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran \
-    -DCMAKE_BUILD_TYPE=Release \
 %endif
-    -DCMAKE_CXX_FLAGS="%{optflags} -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
-    -DCMAKE_C_FLAGS="%{optflags} -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_CXX_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_C_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
-    -DENABLE_OPERA_RADAR=ON
+    -DENABLE_OPERA_RADAR=ON \
+    -DENABLE_EXPOSE_SUBPACKAGES=ON
 
-# This seems to break inline compilation in ctest
-#  -DINSTALL_LIB_DIR=%{_lib} \
+#    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
 
 %{make_build}
 popd
 
 %check
 
+%if 0%{?rhel} == 7
+
+# TODO: investigate tests failures
+#The following tests FAILED:
+#418 - nccombine_bounds_merge_2 (Failed)
+#421 - test_compute_req (Failed)
+#422 - test_interpolation_wave_req (Failed)
+#423 - test_interpolation_gaussian_req (Failed)
+#424 - test_interpolation_l137_req (Failed)
+#425 - test_interpolation_rgg2ll_req (Failed)
+#426 - test_interpolation_latlon_req (Failed)
+#427 - test_interpolation_sh2ll_req (Failed)
+#428 - test_transform_vod2uv_req (Failed)
+#430 - test_retrieve_enfo_req (Failed)
+#431 - test_retrieve_ocean_req (Failed)
+#432 - test_retrieve_fdb_uv_pl_req (Failed)
+#433 - test_retrieve_fdb_uv_ml_req (Failed)
+#434 - test_MARSC_94_req (Failed)
+#447 - interp_emos.mv_dummy_target (Failed)
+
+pushd build
+CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir}:/opt/rh/devtoolset-7/root/usr/lib64/:/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ %{ctest_vers}
+popd
+
+%else
+
 pushd build
 CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
 popd
 
+%endif
+
 %install
 # install all files into the BuildRoot
 [ "%{buildroot}" != / ] && rm -rf %{buildroot}
+
 pushd build
 %make_install
 popd
 
 ln -s metview $RPM_BUILD_ROOT/usr/bin/metview4
 
-# this is hideous but setting -DINSTALL_LIB_DIR seems to break inline compilation (at least in ctest)
-mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
+# this is hideous
+# TODO: fix /etc/ path
+mv $RPM_BUILD_ROOT/usr/etc/ $RPM_BUILD_ROOT/etc/
 
 %clean
 # clean up the hard disk after build
@@ -161,16 +191,33 @@ mv $RPM_BUILD_ROOT/usr/lib/ $RPM_BUILD_ROOT/usr/lib64/
 %{_bindir}/metview_bin/*
 %{_bindir}/metview
 %{_bindir}/metview4
+%{_bindir}/atlas*
+%{_bindir}/*
+%dir %{_sysconfdir}/mir
+%{_sysconfdir}/mir/*
+%dir %{_includedir}/atlas
+%{_includedir}/atlas/*
+%dir %{_includedir}/eckit
+%{_includedir}/eckit/*
 %{_includedir}/macro_api.h
 %{_includedir}/metview_ecbuild_config.h
-%{_datadir}/metview
+%{_includedir}/mars_client_ecbuild_config.h
+%dir %{_includedir}/mir
+%{_includedir}/mir/*
+%{_libdir}/lib*
+%{_libdir}/pkgconfig/*.pc
+%exclude %{_datadir}/MetviewMiniBundle
 %{_datadir}/applications/metview.desktop
-%{_libdir}/libmacro_api_c.a
-%{_libdir}/libmacro_api_f90.a
-%{_libdir}/libMetview.so
-%{_libdir}/libMvFTimeUtil.so
-%{_libdir}/libMvMacro.so
-%{_libdir}/libMvMars.so
+%dir %{_datadir}/atlas/
+%{_datadir}/atlas/*
+%dir %{_datadir}/eckit/
+%{_datadir}/eckit/*
+%dir %{_datadir}/mars_client/
+%{_datadir}/mars_client/*
+%dir %{_datadir}/metview/
+%{_datadir}/metview/*
+%dir %{_datadir}/mir/
+%{_datadir}/mir/*
 
 %changelog
 * Thu May 16 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.3-1
