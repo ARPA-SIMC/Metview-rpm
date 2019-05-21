@@ -8,7 +8,7 @@
 
 Name:           Metview
 Version:        5.5.3
-Release:        2%{dist}
+Release:        3%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
@@ -38,6 +38,7 @@ BuildRequires:  cairo-devel
 BuildRequires:  pango-devel
 BuildRequires:  libgeotiff-devel
 BuildRequires:  jasper-devel
+BuildRequires:  atlas-devel
 BuildRequires:  fftw-devel
 
 # The following is required for ctest
@@ -121,6 +122,7 @@ pushd build
     -DCMAKE_CXX_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DCMAKE_C_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
+    -DBUNDLE_SKIP_ATLAS=ON \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
@@ -195,12 +197,9 @@ mv $RPM_BUILD_ROOT/usr/etc/ $RPM_BUILD_ROOT/etc/
 %{_bindir}/metview_bin/*
 %{_bindir}/metview
 %{_bindir}/metview4
-%{_bindir}/atlas*
 %{_bindir}/*
 %dir %{_sysconfdir}/mir
 %{_sysconfdir}/mir/*
-%dir %{_includedir}/atlas
-%{_includedir}/atlas/*
 %dir %{_includedir}/eckit
 %{_includedir}/eckit/*
 %{_includedir}/macro_api.h
@@ -212,8 +211,6 @@ mv $RPM_BUILD_ROOT/usr/etc/ $RPM_BUILD_ROOT/etc/
 %{_libdir}/pkgconfig/*.pc
 %exclude %{_datadir}/MetviewMiniBundle
 %{_datadir}/applications/metview.desktop
-%dir %{_datadir}/atlas/
-%{_datadir}/atlas/*
 %dir %{_datadir}/eckit/
 %{_datadir}/eckit/*
 %dir %{_datadir}/mars_client/
@@ -224,6 +221,9 @@ mv $RPM_BUILD_ROOT/usr/etc/ $RPM_BUILD_ROOT/etc/
 %{_datadir}/mir/*
 
 %changelog
+* Tue May 21 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.3-3
+- Using system atlas lib
+
 * Tue May 21 2019 Daniele Branchini <dbranchini@arpae.it> - 5.5.3-2
 - Disabling tests for issues on copr buildsystem
 
