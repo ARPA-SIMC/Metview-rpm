@@ -182,8 +182,9 @@ pushd build
 popd
 
 mkdir -p %{buildroot}/usr/bin
-ln -s %{buildroot}/opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview
-ln -s %{buildroot}/opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview4
+
+ln -s /opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview
+ln -s /opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview4
 
 %clean
 # clean up the hard disk after build
