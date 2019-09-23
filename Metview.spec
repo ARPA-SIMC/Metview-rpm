@@ -112,6 +112,9 @@ pushd build
 
 # https://confluence.ecmwf.int/display/METV/Installation+Guide
 
+# PLEASE NOTE: GCC WARNINGS DISABLED
+# (workaround for travis log limit)
+
 %{cmake_vers} .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
@@ -122,8 +125,8 @@ pushd build
     -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ \
     -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran \
 %endif
-    -DCMAKE_CXX_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused -Wno-deprecated-declarations -Wno-error=format-security %{?norpc:-I/usr/include/tirpc -ltirpc}" \
-    -DCMAKE_C_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -Wno-unused %{?norpc:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_CXX_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -w %{?norpc:-I/usr/include/tirpc -ltirpc}" \
+    -DCMAKE_C_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -w %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
