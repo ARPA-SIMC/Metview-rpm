@@ -1,4 +1,3 @@
-Source0:        https://github.com/arpa-simc/%{name}/archive/v%{version}-%{release}.tar.gz#/%{srcarchivename}.tar.gz
 %if 0%{?rhel} == 7
 %define cmake_vers cmake3
 %define ctest_vers ctest3
