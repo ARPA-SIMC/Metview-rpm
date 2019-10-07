@@ -21,6 +21,21 @@ then
     yum-config-manager --enable rhel-server-rhscl-7-rpms
     yum install -q -y devtoolset-7
     yum copr enable -q -y simc/stable
+elif [[ $image =~ ^centos:8 ]]
+then
+    pkgcmd="dnf"
+    builddep="dnf builddep"
+    builddepopt=""
+    sed -i '/^tsflags=/d' /etc/dnf/dnf.conf
+    dnf install -q -y epel-release
+    dnf install -q -y 'dnf-command(config-manager)'
+    dnf config-manager --set-enabled PowerTools
+    dnf groupinstall -q -y "Development Tools"
+    dnf install -q -y 'dnf-command(builddep)'
+    dnf install -q -y git
+    dnf install -q -y rpmdevtools
+    dnf install -q -y pv
+    dnf copr enable -q -y simc/stable
 elif [[ $image =~ ^fedora: ]]
 then
     pkgcmd="dnf"
