@@ -1,3 +1,4 @@
+Source0:        https://github.com/arpa-simc/%{name}/archive/v%{version}-%{release}.tar.gz#/%{srcarchivename}.tar.gz
 %if 0%{?rhel} == 7
 %define cmake_vers cmake3
 %define ctest_vers ctest3
@@ -14,8 +15,10 @@ URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
 
+
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
+BuildRequires:  /usr/bin/rpcgen
 BuildRequires:  cmake
 %{?rhel:BuildRequires: cmake3}
 BuildRequires:  netcdf-devel
@@ -43,6 +46,7 @@ BuildRequires:  ncurses-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  blas-devel
 BuildRequires:  openssl-devel
+
 
 # The following is required for ctest
 BuildRequires:  eccodes
