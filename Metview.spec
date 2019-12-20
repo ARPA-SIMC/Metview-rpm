@@ -57,12 +57,10 @@ BuildRequires: devtoolset-7
 %endif
 
 
-# SunRPC has been removed from glibc since version 2.26, so newer systems should rely on tirpc instead
-# https://fedoraproject.org/wiki/Changes/SunRPCRemoval
+# SunRPC has been removed from glibc since version 2.26, so newer systems (i.e.: everyone except centos7)
+# should rely on tirpc instead - see: https://fedoraproject.org/wiki/Changes/SunRPCRemoval
 
-%if 0%{?fedora} >= 28
-%define norpc 1
-%endif
+%{!?el7:%define norpc 1}
 
 %{?norpc:BuildRequires: rpcgen libtirpc-devel}
 # required in scripts
