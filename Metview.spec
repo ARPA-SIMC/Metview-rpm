@@ -7,7 +7,7 @@
 %endif
 
 Name:           Metview
-Version:        5.6.1
+Version:        5.7.4
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -142,29 +142,21 @@ popd
 %check
 
 # test disabled since they generate a "no space left on device" on copr buildsystem
-%{warn:"Tests disabled! (see specfile for details)"}
+#{warn:"Tests disabled! (see specfile for details)"}
 
-#if 0%{?rhel} == 7
+%if 0%{?rhel} == 7
 
-# TODO: investigate tests failures
-#The following tests FAILED in 5.6.1:
-#139 - atlas_test_pointcloud_io (Child aborted)
-#224 - Metview-5.6.1-Source/mir/tests/assertions/0021.test (Failed)
-#234 - Metview-5.6.1-Source/mir/tests/assertions/0034.test (Failed)
-#482 - thermo.mv_dummy_target (Failed)
+pushd build
+CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir}:/opt/rh/devtoolset-7/root/usr/lib64/:/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ %{ctest_vers}
+popd
 
-#pushd build
-#CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir}:/opt/rh/devtoolset-7/root/usr/lib64/:/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ %{ctest_vers}
-#popd
+%else
 
+pushd build
+CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
+popd
 
-#else
-
-#pushd build
-#CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
-#popd
-
-#endif
+%endif
 
 %install
 # install all files into the BuildRoot
@@ -191,6 +183,9 @@ ln -s /opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview4
 %{_bindir}/metview4
 
 %changelog
+* Thu Jan  9 2020 Daniele Branchini <dbranchini@arpae.it> - 5.7.4-1
+- Version 5.7.4
+
 * Fri Sep 20 2019 Daniele Branchini <dbranchini@arpae.it> - 5.6.1-1
 - Version 5.6.1
 
