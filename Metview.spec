@@ -169,7 +169,7 @@ mkdir -p %{buildroot}/usr/bin
 
 ln -s /opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview
 ln -s /opt/%{name}-%{version}/bin/metview %{buildroot}/usr/bin/metview4
-chmod +x /opt/%{name}-%{version}/bin/metview_bin/metview_help
+chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/metview_help
 
 %clean
 # clean up the hard disk after build
