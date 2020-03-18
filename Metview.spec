@@ -7,7 +7,7 @@
 %endif
 
 Name:           Metview
-Version:        5.7.4
+Version:        5.7.5
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -45,7 +45,7 @@ BuildRequires:  ncurses-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  blas-devel
 BuildRequires:  openssl-devel
-
+BuildRequires:  openjpeg2-devel
 
 # The following is required for ctest
 BuildRequires:  eccodes
@@ -183,6 +183,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Mar 18 2020 Daniele Branchini <dbranchini@arpae.it> - 5.7.5-1
+- Version 5.7.5
+
 * Thu Jan  9 2020 Daniele Branchini <dbranchini@arpae.it> - 5.7.4-1
 - Version 5.7.4
 
