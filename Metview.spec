@@ -45,7 +45,10 @@ BuildRequires:  ncurses-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  blas-devel
 BuildRequires:  openssl-devel
+%if 0%{?fedora} > 30
+# apparently this is needed only for newer versions
 BuildRequires:  openjpeg2-devel
+%endif
 
 # The following is required for ctest
 BuildRequires:  eccodes
