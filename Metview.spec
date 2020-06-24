@@ -1,13 +1,6 @@
-%if 0%{?rhel} == 7
-%define cmake_vers cmake3
-%define ctest_vers ctest3
-%else
-%define cmake_vers cmake
-%define ctest_vers ctest
-%endif
-
+%{?rhel:BuildRequires: cmake3}
 Name:           Metview
-Version:        5.7.5
+Version:        5.8.3
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -17,13 +10,13 @@ Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
-BuildRequires:  /usr/bin/rpcgen
+BuildRequires:  rpcgen
+BuildRequires:  libtirpc-devel
 BuildRequires:  cmake
-%{?rhel:BuildRequires: cmake3}
 BuildRequires:  netcdf-devel
-BuildRequires:  netcdf-cxx-devel
-%{?fedora:BuildRequires: netcdf-cxx4-devel}
-BuildRequires:  proj-devel
+#BuildRequires:  netcdf-cxx-devel
+BuildRequires:  netcdf-cxx4-devel
+BuildRequires:  proj-devel >= 6
 BuildRequires:  eccodes-devel >= 2.12.0
 BuildRequires:  libemos
 BuildRequires:  Magics-devel
@@ -45,27 +38,12 @@ BuildRequires:  ncurses-devel
 BuildRequires:  eigen3-devel
 BuildRequires:  blas-devel
 BuildRequires:  openssl-devel
-%if 0%{?fedora} > 30
-# apparently this is needed only for newer versions
 BuildRequires:  openjpeg2-devel
-%endif
 
 # The following is required for ctest
 BuildRequires:  eccodes
 BuildRequires:  eccodes-data
 
-%if 0%{?rhel} == 7
-# newer gcc needed
-BuildRequires: devtoolset-7
-%endif
-
-
-# SunRPC has been removed from glibc since version 2.26, so newer systems (i.e.: everyone except centos7)
-# should rely on tirpc instead - see: https://fedoraproject.org/wiki/Changes/SunRPCRemoval
-
-%{!?el7:%define norpc 1}
-
-%{?norpc:BuildRequires: rpcgen libtirpc-devel}
 # required in scripts
 Requires: hostname /usr/bin/xdpyinfo
 # launched by UI
@@ -116,49 +94,44 @@ pushd build
 
 # https://confluence.ecmwf.int/display/METV/Installation+Guide
 
-# PLEASE NOTE: GCC WARNINGS DISABLED
+# PLEASE NOTE:
+# 1)
+# GCC WARNINGS DISABLED
 # (workaround for travis log limit)
+# 2)
+# The "-include string" option is for gcc10, see:
+# https://gcc.gnu.org/gcc-10/porting_to.html
 
-%{cmake_vers} .. \
+%{cmake} .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
+    -DCMAKE_CXX_FLAGS="%{optflags} -include string -w -I/usr/include/tirpc -ltirpc" \
+    -DCMAKE_C_FLAGS="%{optflags} -w -I/usr/include/tirpc -ltirpc -lgfortran" \
+    -DCMAKE_Fortran_FLAGS="%{optflags}" \
     -DINSTALL_LIB_DIR=%{_lib} \
-%if 0%{?rhel} == 7
-    -DCMAKE_C_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/gcc \
-    -DCMAKE_CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/g++ \
-    -DCMAKE_Fortran_COMPILER=/usr/bin/gfortran \
-%endif
-    -DCMAKE_CXX_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -w %{?norpc:-I/usr/include/tirpc -ltirpc}" \
-    -DCMAKE_C_FLAGS="%{optflags} -L/opt/rh/devtoolset-7/root/usr/lib64 -L/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ -I/opt/rh/devtoolset-7/root/usr/local/include -w %{?norpc:-I/usr/include/tirpc -ltirpc}" \
     -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
+    -DENABLE_ECCODES=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
     -DENABLE_OPERA_RADAR=ON
 
 #    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
+#    -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
+#    -DECCODES_INCLUDE_DIR=%{_includedir} \
 
 %{make_build}
 popd
 
 %check
 
-# test disabled since they generate a "no space left on device" on copr buildsystem
+# tests disabled since they generate a "no space left on device" on copr buildsystem
 %{warn:"Tests disabled! (see specfile for details)"}
 
-#if 0%{?rhel} == 7
 #pushd build
-#CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir}:/opt/rh/devtoolset-7/root/usr/lib64/:/opt/rh/devtoolset-7/root/usr/lib/gcc/x86_64-redhat-linux/7/ %{ctest_vers}
+#CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} ctest
 #popd
-
-#else
-
-#pushd build
-#CTEST_OUTPUT_ON_FAILURE=1 ECCODES_DEFINITION_PATH=%{_datarootdir}/eccodes/definitions LD_LIBRARY_PATH=%{buildroot}%{_libdir} %{ctest_vers}
-#popd
-
-#endif
 
 %install
 # install all files into the BuildRoot
@@ -186,6 +159,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Jun 24 2020 Daniele Branchini <dbranchini@arpae.it> - 5.8.3-1
+- Version 5.8.3, dropping centos 7 support and proj < 6 support
+
 * Wed Mar 18 2020 Daniele Branchini <dbranchini@arpae.it> - 5.7.5-1
 - Version 5.7.5
 
