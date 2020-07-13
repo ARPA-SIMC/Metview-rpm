@@ -1,6 +1,6 @@
 %{?rhel:BuildRequires: cmake3}
 Name:           Metview
-Version:        5.8.3
+Version:        5.9.0
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -159,6 +159,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Mon Jul 13 2020 Emanuele Di Giacomo <edigiacomo@arpae.it> - 5.9.0-1
+- Version 5.9.0
+
 * Wed Jun 24 2020 Daniele Branchini <dbranchini@arpae.it> - 5.8.3-1
 - Version 5.8.3, dropping centos 7 support and proj < 6 support
 
