@@ -1,4 +1,3 @@
-%{?rhel:BuildRequires: cmake3}
 Name:           Metview
 Version:        5.10.2
 Release:        1%{dist}
