@@ -104,7 +104,7 @@ pushd build
 # The "-include string" option is for gcc10, see:
 # https://gcc.gnu.org/gcc-10/porting_to.html
 
-%{cmake} .. \
+cmake .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
@@ -112,9 +112,7 @@ pushd build
     -DCMAKE_C_FLAGS="%{optflags} -w -I/usr/include/tirpc -ltirpc -lgfortran" \
     -DCMAKE_Fortran_FLAGS="%{optflags}" \
     -DINSTALL_LIB_DIR=%{_lib} \
-    -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
     -DBUILD_SHARED_LIBS=ON \
-    -DENABLE_ECCODES=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
     -DENABLE_OPERA_RADAR=ON
