@@ -1,6 +1,6 @@
 %{?rhel:BuildRequires: cmake3}
 Name:           Metview
-Version:        5.9.0
+Version:        5.10.2
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -12,7 +12,10 @@ BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  rpcgen
 BuildRequires:  libtirpc-devel
-BuildRequires:  cmake
+BuildRequires:  cmake >= 3.12
+# forcing libarchive update in CentOS 8 from simc/stable repo
+# needed for updated cmake
+%{?el8:BuildRequires: libarchive >= 3.3.3}
 BuildRequires:  netcdf-devel
 #BuildRequires:  netcdf-cxx-devel
 BuildRequires:  netcdf-cxx4-devel
@@ -159,6 +162,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Mar 17 2021 Daniele Branchini <dbranchini@arpae.it> - 5.10.2-1
+- Version 5.10.2
+
 * Mon Jul 13 2020 Emanuele Di Giacomo <edigiacomo@arpae.it> - 5.9.0-1
 - Version 5.9.0
 
