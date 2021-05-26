@@ -62,8 +62,6 @@ then
     spectool -g -R -S ~/rpmbuild/SPECS/Metview.spec
     set +x
     rpmbuild -ba ~/rpmbuild/SPECS/Metview.spec 2>&1 | pv -q -L 3k
-    find ~/rpmbuild/{RPMS,SRPMS}/ -name "${pkgname}*rpm" -exec cp -v {} . \;
-    # TODO upload ${pkgname}*.rpm to github release on deploy stage
 else
     echo "Unsupported image"
     exit 1
