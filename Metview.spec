@@ -1,5 +1,5 @@
 Name:           Metview
-Version:        5.10.2
+Version:        5.12.0
 Release:        1%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -96,30 +96,17 @@ pushd build
 
 # https://confluence.ecmwf.int/display/METV/Installation+Guide
 
-# PLEASE NOTE:
-# 1)
-# GCC WARNINGS DISABLED
-# (workaround for travis log limit)
-# 2)
-# The "-include string" option is for gcc10, see:
-# https://gcc.gnu.org/gcc-10/porting_to.html
-
 cmake .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
+    -DCMAKE_C_FLAGS="%{optflags} -lgfortran" \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
-    -DCMAKE_CXX_FLAGS="%{optflags} -include string -w -I/usr/include/tirpc -ltirpc" \
-    -DCMAKE_C_FLAGS="%{optflags} -w -I/usr/include/tirpc -ltirpc -lgfortran" \
     -DCMAKE_Fortran_FLAGS="%{optflags}" \
     -DINSTALL_LIB_DIR=%{_lib} \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
     -DENABLE_OPERA_RADAR=ON
-
-#    -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON 
-#    -DGRIB_API_INCLUDE_DIR=%{_libdir}/gfortran/modules \
-#    -DECCODES_INCLUDE_DIR=%{_includedir} \
 
 %{make_build}
 popd
@@ -159,6 +146,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Fri Jun  4 2021 Daniele Branchini <dbranchini@arpae.it> - 5.12.0-1
+- Version 5.12.0
+
 * Wed Mar 17 2021 Daniele Branchini <dbranchini@arpae.it> - 5.10.2-1
 - Version 5.10.2
 
