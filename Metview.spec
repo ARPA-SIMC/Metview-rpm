@@ -1,11 +1,13 @@
+%global releaseno 2
+
 Name:           Metview
 Version:        5.12.0
-Release:        1%{dist}
+Release:        %{releaseno}%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
-
+Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-fix-xdpyinfo.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -16,7 +18,6 @@ BuildRequires:  cmake >= 3.12
 # needed for updated cmake
 %{?el8:BuildRequires: libarchive >= 3.3.3}
 BuildRequires:  netcdf-devel
-#BuildRequires:  netcdf-cxx-devel
 BuildRequires:  netcdf-cxx4-devel
 BuildRequires:  proj-devel >= 6
 BuildRequires:  eccodes-devel >= 2.12.0
@@ -88,6 +89,7 @@ Forecasts and Climate Studies).
 
 %prep
 %setup -q -n %{name}-%{version}-Source
+%patch0
 
 %build
 
@@ -146,6 +148,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Jun 23 2021 Daniele Branchini <dbranchini@arpae.it> - 5.12.0-2
+- fix Argument list too long issue (https://jira.ecmwf.int/browse/SUP-3467)
+
 * Fri Jun  4 2021 Daniele Branchini <dbranchini@arpae.it> - 5.12.0-1
 - Version 5.12.0
 

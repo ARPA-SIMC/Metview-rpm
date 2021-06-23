@@ -1,0 +1,17 @@
+--- metview/scripts/metview_base.in
++++ metview/scripts/metview_base.in
+@@ -963,11 +963,10 @@
+       METVIEW_RASTER_EDITOR=${METVIEW_RASTER_EDITOR:=gimp}
+       METVIEW_KML_VIEWER=${METVIEW_KML_VIEWER:=google-earth}
+ 
+-      resY=$(xdpyinfo 2>/dev/null) && resY_exit_st=$? || resY_exit_st=$?
+-      if [ "$resY_exit_st" != 0 ] ; then
+-        resY=""
++      if xdpyinfo &>/dev/null; then
++        resY=$(xdpyinfo | grep "resolution" | awk '{print $2}' | cut -d "x" -f 2)
+       else
+-        resY=$(echo "$resY" | \grep "resolution" | awk '{print $2}' | cut -d "x" -f 2)
++        resY=""
+       fi
+       METVIEW_SCREEN_RESOLUTION=${METVIEW_SCREEN_RESOLUTION:=$resY}
+ 
