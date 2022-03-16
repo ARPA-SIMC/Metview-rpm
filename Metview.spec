@@ -1,7 +1,7 @@
 %global releaseno 1
 
 Name:           Metview
-Version:        5.13.1
+Version:        5.15.1
 Release:        %{releaseno}%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
@@ -146,6 +146,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Mar 16 2022 Daniele Branchini <dbranchini@arpae.it> - 5.15.1-1
+- Version 5.15.1
+
 * Fri Oct 22 2021 Daniele Branchini <dbranchini@arpae.it> - 5.13.1-1
 - Version 5.13.1
 
