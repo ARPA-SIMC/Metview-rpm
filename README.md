@@ -1,5 +1,5 @@
 [![Build Status](https://simc.arpae.it/moncic-ci/Metview-rpm/centos8.png)](https://simc.arpae.it/moncic-ci/Metview-rpm/)
-[![Build Status](https://simc.arpae.it/moncic-ci/Metview-rpm/fedora34.png)](https://simc.arpae.it/moncic-ci/Metview-rpm/)
+[![Build Status](https://simc.arpae.it/moncic-ci/Metview-rpm/fedora36.png)](https://simc.arpae.it/moncic-ci/Metview-rpm/)
 [![Build Status](https://copr.fedorainfracloud.org/coprs/simc/stable/package/Metview/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/simc/stable/package/Metview/)
 
 # rpm packaging files for Metview
