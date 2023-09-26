@@ -90,8 +90,8 @@ Forecasts and Climate Studies).
 
 %prep
 %setup -q -n %{name}-%{version}-Source
-%patch 0
-%patch 1
+%patch0 -p0
+%patch1 -p0
 
 %build
 
