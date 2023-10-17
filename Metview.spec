@@ -1,14 +1,12 @@
-%global releaseno 2
+%global releaseno 1
 
 Name:           Metview
-Version:        5.15.1
+Version:        5.20.0
 Release:        %{releaseno}%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
-Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/Metview-fix-url.patch
-Patch1:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/Metview-fix-include.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -90,8 +88,6 @@ Forecasts and Climate Studies).
 
 %prep
 %setup -q -n %{name}-%{version}-Source
-%patch0 -p0
-%patch1 -p0
 
 %build
 
@@ -150,6 +146,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Tue Oct 17 2023 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-1
+- Version 5.20.0
+
 * Mon Sep 25 2023 Daniele Branchini <dbranchini@arpae.it> - 5.15.1-2
 - Fixed download url for mir, added missing include
 
