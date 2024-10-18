@@ -20,7 +20,6 @@ BuildRequires:  netcdf-devel
 BuildRequires:  netcdf-cxx4-devel
 BuildRequires:  proj-devel >= 6
 BuildRequires:  eccodes-devel >= 2.12.0
-BuildRequires:  libemos
 BuildRequires:  Magics-devel
 BuildRequires:  boost-devel
 BuildRequires:  git
