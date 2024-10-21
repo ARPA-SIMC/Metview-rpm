@@ -99,7 +99,7 @@ pushd build
 
 cmake .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
-    -DCMAKE_C_FLAGS="%{optflags} -lgfortran" \
+    -DCMAKE_C_FLAGS="%{optflags} -lgfortran -Wno-incompatible-pointer-types" \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
     -DCMAKE_Fortran_FLAGS="%{optflags}" \
