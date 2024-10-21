@@ -7,6 +7,7 @@ Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
+Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-include-algorithm.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -87,6 +88,7 @@ Forecasts and Climate Studies).
 
 %prep
 %setup -q -n %{name}-%{version}-Source
+%patch0
 
 %build
 
