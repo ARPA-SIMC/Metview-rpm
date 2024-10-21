@@ -1,0 +1,73 @@
+--- atlas/src/atlas/field/detail/FieldImpl.h.orig	2024-10-21 09:16:04.180009670 +0200
++++ atlas/src/atlas/field/detail/FieldImpl.h	2024-10-21 09:16:55.584246394 +0200
+@@ -16,6 +16,7 @@
+ #include <functional>
+ #include <string>
+ #include <vector>
++#include <algorithm>
+ 
+ #include "atlas/util/Object.h"
+ 
+--- metview/src/uPlot/MacroConverter.cc.orig	2024-10-21 12:58:03.860164851 +0200
++++ metview/src/uPlot/MacroConverter.cc	2024-10-21 12:58:13.145036890 +0200
+@@ -15,6 +15,7 @@
+ #include <set>
+ #include <string>
+ #include <vector>
++#include <algorithm>
+ 
+ #include "fstream_mars_fix.h"
+ 
+--- metview/src/uPlot/MvDecoder.cc.orig	2024-10-21 14:11:38.361400439 +0200
++++ metview/src/uPlot/MvDecoder.cc	2024-10-21 14:11:56.366154468 +0200
+@@ -16,6 +16,7 @@
+ #include "MvDecoder.h"
+ #include "MvGribDecoder.h"
+ #include "ObjectList.h"
++#include <algorithm>
+ 
+ //==================================================================
+ // Decoder Factory class
+--- metview/src/uPlot/Page.cc.orig	2024-10-21 15:58:40.658477670 +0200
++++ metview/src/uPlot/Page.cc	2024-10-21 15:59:21.524871719 +0200
+@@ -13,6 +13,8 @@
+ 
+ #include "Page.h"
+ 
++#include <algorithm>
++
+ #include <Assertions.hpp>
+ #include <MvApplication.h>
+ #include <MvRequestUtil.hpp>
+--- metview/src/uPlot/Presentable.cc.orig	2024-10-21 16:42:37.007493414 +0200
++++ metview/src/uPlot/Presentable.cc	2024-10-21 16:42:48.994331371 +0200
+@@ -10,6 +10,7 @@
+ #include "Presentable.h"
+ 
+ #include <sstream>
++#include <algorithm>
+ 
+ #include <Assertions.hpp>
+ #include "MvDecoder.h"
+--- metview/src/uPlot/ThermoView.cc.orig	2024-10-21 17:28:06.998668954 +0200
++++ metview/src/uPlot/ThermoView.cc	2024-10-21 17:28:31.443330438 +0200
+@@ -15,6 +15,8 @@
+ #include "Root.h"
+ #include "MvLog.h"
+ 
++#include <algorithm>
++
+ // Thermo types
+ static const std::string THERMOTEPHI = "TEPHIGRAM";
+ static const std::string THERMOSKEWT = "SKEW_T";
+--- metview/src/uPlot/SuperPage.cc.orig	2024-10-21 18:07:28.469045800 +0200
++++ metview/src/uPlot/SuperPage.cc	2024-10-21 18:08:01.803586500 +0200
+@@ -16,6 +16,8 @@
+ 
+ #include "SuperPage.h"
+ 
++#include <algorithm>
++
+ #include <Assertions.hpp>
+ #include "MacroVisitor.h"
+ #include "MvApplication.h"
