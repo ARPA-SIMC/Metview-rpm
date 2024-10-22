@@ -1,4 +1,4 @@
-%global releaseno 1
+%global releaseno 2
 
 Name:           Metview
 Version:        5.20.0
@@ -147,6 +147,11 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Tue Oct 22 2024 Emanuele Di Giacomo <edigiacomo@arpae.it> - 5.20.0-2
+- Removed deprecated libemos dependency
+- Added -Wno-incompatile-pointer-types to gcc
+- Added patch to include algorithm header where needed
+
 * Tue Oct 17 2023 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-1
 - Version 5.20.0
 
