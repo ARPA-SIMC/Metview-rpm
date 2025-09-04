@@ -113,7 +113,8 @@ cmake .. \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
-    -DENABLE_OPERA_RADAR=ON
+    -DENABLE_OPERA_RADAR=ON \
+    -DENABLE_MARS=OFF
 
 %{make_build}
 popd
