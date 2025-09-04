@@ -1,4 +1,4 @@
-%global releaseno 2
+%global releaseno 3
 
 Name:           Metview
 Version:        5.20.0
@@ -88,7 +88,13 @@ Forecasts and Climate Studies).
 
 %prep
 %setup -q -n %{name}-%{version}-Source
+
+# patching syntax changed
+%if 0%{?rhel}
 %patch0
+%else
+%patch 0
+%endif
 
 %build
 
@@ -147,6 +153,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Thu Sep  4 2025 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-3
+- Changed patching syntax for Fedora
+
 * Tue Oct 22 2024 Emanuele Di Giacomo <edigiacomo@arpae.it> - 5.20.0-2
 - Removed deprecated libemos dependency
 - Added -Wno-incompatile-pointer-types to gcc
