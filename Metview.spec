@@ -1,4 +1,4 @@
-%global releaseno 3
+%global releaseno 4
 
 Name:           Metview
 Version:        5.20.0
@@ -116,8 +116,7 @@ cmake .. \
     -DBUILD_SHARED_LIBS=ON \
     -DENABLE_UI=ON \
     -DENABLE_PLOTTING=ON \
-    -DENABLE_OPERA_RADAR=ON \
-    -DENABLE_MARS=OFF
+    -DENABLE_OPERA_RADAR=ON
 
 %{make_build}
 popd
@@ -157,6 +156,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Mon Sep 15 2025 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-4
+- Fix strcache declaration (#3)
+
 * Thu Sep  4 2025 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-3
 - Changed patching syntax for Fedora
 
