@@ -8,6 +8,7 @@ URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
 Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-include-algorithm.patch
+Patch1:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-strcache-conflicting-types.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -92,8 +93,10 @@ Forecasts and Climate Studies).
 # patching syntax changed
 %if 0%{?rhel}
 %patch0
+%patch1
 %else
 %patch 0
+%patch 1
 %endif
 
 %build

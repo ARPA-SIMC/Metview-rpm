@@ -1,0 +1,11 @@
+--- mars-client/src/rpcmars.x.orig	2025-09-15 10:14:29.946791219 +0200
++++ mars-client/src/rpcmars.x	2025-09-15 10:19:08.719958076 +0200
+@@ -11,7 +11,7 @@
+ #ifdef RPC_XDR
+ %bool_t xdr_cache_t(XDR *xdrs,char **name)
+ %{
+-%   extern char* strcache();
++%   extern char* strcache(const char*);
+ %	char *sp = *name;
+ %
+ %	switch (xdrs->x_op)
