@@ -1,4 +1,4 @@
-%global releaseno 4
+%global releaseno 5
 
 Name:           Metview
 Version:        5.20.0
@@ -111,6 +111,7 @@ cmake .. \
     -DCMAKE_C_FLAGS="%{optflags} -lgfortran -Wno-incompatible-pointer-types" \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
+    -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCMAKE_Fortran_FLAGS="%{optflags}" \
     -DINSTALL_LIB_DIR=%{_lib} \
     -DBUILD_SHARED_LIBS=ON \
@@ -156,6 +157,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Tue Sep 08 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-5
+- added CMAKE_POLICY_VERSION_MINIMUM for fedora 44 (cmake 4.3)
+
 * Mon Sep 15 2025 Daniele Branchini <dbranchini@arpae.it> - 5.20.0-4
 - Fix strcache declaration (#3)
 
