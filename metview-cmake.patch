@@ -1,0 +1,15 @@
+--- metview/CMakeLists.txt.orig	2023-07-11 11:52:18.000000000 +0200
++++ metview/CMakeLists.txt	2026-10-14 12:04:23.548917742 +0200
+@@ -104,9 +104,9 @@
+ 
+ 
+ # ensure we can add non-existent dependencies - required for generating icon files
+-if( ${CMAKE_VERSION} VERSION_GREATER "2.9.9" )
+-    cmake_policy(SET CMP0046 OLD)
+-endif()
++#if( ${CMAKE_VERSION} VERSION_GREATER "2.9.9" )
++#    cmake_policy(SET CMP0046 OLD)
++#endif()
+ 
+ 
+ 

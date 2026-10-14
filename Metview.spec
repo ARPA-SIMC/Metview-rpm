@@ -1,4 +1,4 @@
-%global releaseno 5
+%global releaseno 6
 
 Name:           Metview
 Version:        5.20.0
@@ -9,6 +9,7 @@ License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
 Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-include-algorithm.patch
 Patch1:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-strcache-conflicting-types.patch
+Patch2:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-cmake.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -99,6 +100,10 @@ Forecasts and Climate Studies).
 %patch 1
 %endif
 
+%if 0%{?fedora} >= 44
+%patch 2
+%endif
+
 %build
 
 mkdir build
@@ -157,6 +162,9 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
+* Wed Oct 14 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-6%
+- added patch for policy SET CMP0046 OLD for fedora 44
+
 * Tue Sep 08 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-5
 - added CMAKE_POLICY_VERSION_MINIMUM for fedora 44 (cmake 4.3)
 
