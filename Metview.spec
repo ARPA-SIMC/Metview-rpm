@@ -1,15 +1,13 @@
-%global releaseno 6
+%global releaseno 1
 
 Name:           Metview
-Version:        5.20.0
+Version:        5.26.2
 Release:        %{releaseno}%{dist}
 Summary:        Metview is an interactive meteorological application
 URL:            https://confluence.ecmwf.int/display/METV/Metview
 License:        Apache License, Version 2.0
 Source0:        https://confluence.ecmwf.int/download/attachments/3964985/%{name}-%{version}-Source.tar.gz
-Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-include-algorithm.patch
-Patch1:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-strcache-conflicting-types.patch
-Patch2:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-cmake.patch
+Patch0:         https://raw.githubusercontent.com/ARPA-SIMC/Metview-rpm/v%{version}-%{releaseno}/metview-strcache-conflicting-types.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
@@ -43,6 +41,7 @@ BuildRequires:  eigen3-devel
 BuildRequires:  blas-devel
 BuildRequires:  openssl-devel
 BuildRequires:  openjpeg2-devel
+BuildRequires:  lz4-devel
 
 # The following is required for ctest
 BuildRequires:  eccodes
@@ -94,14 +93,8 @@ Forecasts and Climate Studies).
 # patching syntax changed
 %if 0%{?rhel}
 %patch0
-%patch1
 %else
 %patch 0
-%patch 1
-%endif
-
-%if 0%{?fedora} >= 44
-%patch 2
 %endif
 
 %build
@@ -114,6 +107,7 @@ pushd build
 cmake .. \
     -DCMAKE_PREFIX_PATH=%{_prefix} \
     -DCMAKE_C_FLAGS="%{optflags} -lgfortran -Wno-incompatible-pointer-types" \
+    -DCMAKE_CXX_FLAGS="%{optflags} -I/usr/include/eigen3 -lgfortran" \
     -DCMAKE_INSTALL_PREFIX=/opt/%{name}-%{version} \
     -DCMAKE_INSTALL_MESSAGE=NEVER \
     -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
