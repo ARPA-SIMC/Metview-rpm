@@ -156,7 +156,10 @@ chmod +x %{buildroot}/opt/%{name}-%{version}/lib/metview-bundle/bin/metview_bin/
 %{_bindir}/metview4
 
 %changelog
-* Wed Oct 14 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-6%
+* Thu Oct 15 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.26.2-1
+- Upstream update
+
+* Wed Oct 14 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-6
 - added patch for policy SET CMP0046 OLD for fedora 44
 
 * Tue Sep 08 2026 Daniele Branchini  <dbranchini@arpae.it> - 5.20.0-5
